@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour {
 						float totTime = 0;
 						foreach(var m in mines){
 							var t = Random.value;
+							if(totTime > 7) t *= 0.075f;
 							StartCoroutine(Delay(totTime+=t, ()=>m.Reveal()));
 						}
 					}

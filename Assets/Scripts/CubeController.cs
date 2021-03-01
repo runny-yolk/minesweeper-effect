@@ -36,6 +36,13 @@ public class CubeController : MonoBehaviour {
 	}
 
 	public void Reveal(int delay = 0){
+		float d = delay;
+
+		var t = d * 0.125f;
+		if(delay > 15) t = d * (0.125f/2);
+		if(delay > 36) t = d * (0.125f/3);
+		if(delay > 54) t = d * (0.125f/4);
+
 		if(isRevealed) return;
 
 		if(isFlagged) Flag();
@@ -52,7 +59,7 @@ public class CubeController : MonoBehaviour {
 			isRevealed = true;
 			gm.RevealedUp();
 			if(nearbyMines == 0) {
-				StartCoroutine(gm.Delay(delay*0.125f, () => {
+				StartCoroutine(gm.Delay(t, () => {
 					ParticleBurst();
 					if(delay % 3 == 0) PlayNote();
 					mr.sharedMaterial = inactive;
@@ -63,7 +70,7 @@ public class CubeController : MonoBehaviour {
 				}});
 			}
 			else {
-				StartCoroutine(gm.Delay(delay*0.125f, () => {
+				StartCoroutine(gm.Delay(t, () => {
 					ParticleBurst();
 					if(delay % 3 == 0) PlayNote();
 					textComp.gameObject.SetActive(true);
