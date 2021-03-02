@@ -21,7 +21,8 @@ Material:
     m_TexEnvs: []
     m_Floats:
     - Vector1_816F334B: 1
+    - _Threshold: 2
     m_Colors:
     - Color_ADA9E25E: {r: 1, g: 0.08962262, b: 0.08962262, a: 0}
-    - Color_AE8CDAEF: {r: 0.8773585, g: 0.376602, b: 0.376602, a: 0}
+    - Color_AE8CDAEF: {r: 0.8784314, g: 0.376602, b: 0.376602, a: 0}
   m_BuildTextureStacks: []

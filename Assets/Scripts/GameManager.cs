@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
 	public Vector2Int size;
 	public TMPro.TMP_Text scoreText;
 	public TMPro.TMP_Text gameOverText;
+	public Rigidbody wreckingBall;
+	public Animator congratsText;
 	
 	[Header("State")]
 	public CubeController[,] cubes;
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour {
 	public bool gameOver;
 
     void Start() {
+		Time.timeScale = 1;
+		Time.fixedDeltaTime = 0.02f;
 		Random.InitState((int)System.DateTime.Now.Ticks);
 
 		transform.position = -(new Vector3(size.x-1, size.y-1, 0)/2);
@@ -33,6 +37,8 @@ public class GameManager : MonoBehaviour {
 			cubes[v.x, v.y] = cc;
 			cc.index = new Vector2Int(v.x, v.y);
 			cc.gm = this;
+
+			cc.audio.panStereo = (( (float)v.x - size.x/2f)/size.x)*2;
 
 			if(cc.isMine = Random.value < difficulty) {
 				totalMines++;
@@ -93,11 +99,24 @@ public class GameManager : MonoBehaviour {
 
 	void SetGameOver(bool win){
 		gameOver = true;
-		scoreText.text = win ? "Congratulations!" : "Game Over!";
+		if(win){
+			StartCoroutine(Delay(1.25f, ()=> {
+				congratsText.SetTrigger("FadeIn");
+				Time.timeScale = 0.025f;
+				Time.fixedDeltaTime *= 0.025f;
+			}));
+			// Time.timeScale = 0.1f;
+			GetComponent<AudioSource>().Play();
+			cubes.ForEach2D((v, cc) => cc.GetComponent<Rigidbody>().isKinematic = false);
+			wreckingBall.isKinematic = false;
+			wreckingBall.AddForce(Vector3.right*50, ForceMode.VelocityChange);
+		} else {
+			scoreText.text = "Game Over!";
+		}
 	}
 
 	public IEnumerator Delay(float s, System.Action cb){
-		yield return new WaitForSeconds(s);
+		yield return new WaitForSecondsRealtime(s);
 		cb();
 	}
 }

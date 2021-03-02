@@ -12,6 +12,7 @@ public class CubeController : MonoBehaviour {
 	public Gradient textColour;
 	public GameObject flagLight;
 	public GameObject revealLight;
+	public GameObject quad;
 
 	public Vector2Int index;
 	public GameManager gm;
@@ -21,7 +22,7 @@ public class CubeController : MonoBehaviour {
 	public bool isFlagged;
 
 	MeshRenderer mr => GetComponent<MeshRenderer>();
-	new AudioSource audio => GetComponent<AudioSource>();
+	new public AudioSource audio => GetComponent<AudioSource>();
 
 	void Start(){
 		textComp.text = nearbyMines.ToString();
@@ -43,7 +44,10 @@ public class CubeController : MonoBehaviour {
 		if(delay > 36) t = d * (0.125f/3);
 		if(delay > 54) t = d * (0.125f/4);
 
-		if(isRevealed) return;
+		if(isRevealed) {
+			if(nearbyMines > 0) quad.SetActive(!quad.activeSelf);
+			return;
+		}
 
 		if(isFlagged) Flag();
 
